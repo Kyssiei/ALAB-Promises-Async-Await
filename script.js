@@ -22,15 +22,31 @@ central(10).then(db => console.log(db))
 db3(10).then(userBasicInfo => console.log(userBasicInfo))
 vault(10).then(userPersonalInfo => console.log(userPersonalInfo))
 
+console.log("=========================================");
 
 //todo: check validity of id between 1-10
-function getUserData(id) {
+async function getUserData(id) {
+  if (typeof id !== "number") throw new Error("Invalid Input -- Not a Number");
+  if (id < 1 || id > 10) throw new Error("Invalid Input -- Out of Range");
+
   const dbs = {
     db1: db1,
     db2: db2,
     db3: db3,
   };
-}
+  try {
+    const dbName = await central(id);
+    const userData = await dbs[dbName](id);
+    console.log(userData);
+    return userData;
+
+  } catch (error) {
+    console.error("Error:", error.message);
+  };
+
+};
 
 
-
+getUserData(3);
+getUserData(6);
+getUserData(6);
